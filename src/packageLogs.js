@@ -71,35 +71,38 @@ export function initPackager(newLogs, newConfig) {
  * @return {boolean}           Whether the event was logged.
  */
 export function packageLog(e, detailFcn) {
-  if (!config.on) {
-    return false;
-  }
+    var log;
+    if (!config.on) {
+        return false;
+    }
 
-  var details = null;
-  if (detailFcn) {
-    details = detailFcn(e);
-  }
+    var details = null;
+    if (detailFcn) {
+        details = detailFcn(e);
+    }
 
-  var timeFields = extractTimeFields(
-    (e.timeStamp && e.timeStamp > 0) ? config.time(e.timeStamp) : Date.now()
-  );
+    var timeFields = extractTimeFields(
+        (e.timeStamp && e.timeStamp > 0) ? config.time(e.timeStamp) : Date.now()
+    );
 
-  var log = {
-    'target' : getSelector(e.target),
-    'path' : buildPath(e),
-    'clientTime' : timeFields.milli,
-    'microTime' : timeFields.micro,
-    'location' : getLocation(e),
-    'type' : e.type,
-    'logType': 'raw',
-    'userAction' : true,
-    'details' : details,
-    'userId' : config.userId,
-    'toolVersion' : config.version,
-    'toolName' : config.toolName,
-    'useraleVersion': config.useraleVersion,
-    'sessionID': config.sessionID
-  };
+    log = {
+        'target': getSelector(e.target),
+        'path': buildPath(e),
+        'pageUrl': window.location.href,
+        'pageTitle': document.title,
+        'pageReferrer': document.referrer,
+        'clientTime': timeFields.milli,
+        'microTime': timeFields.micro,
+        'location': getLocation(e),
+        'type': e.type,
+        'logType': 'raw',
+        'details': details,
+        'userId': config.userId,
+        'toolVersion': config.version,
+        'toolName': config.toolName,
+        'useraleVersion': config.useraleVersion,
+        'sessionID': config.sessionID
+    };
 
   if ((typeof filterHandler === 'function') && !filterHandler(log)) {
     return false;
@@ -154,6 +157,9 @@ export function packageIntervalLog(e) {
         intervalLog = {
             'target': intervalID,
             'path': intervalPath,
+            'pageUrl' : window.location.href,
+            'pageTitle' : document.title,
+            'pageReferrer' : document.referrer,
             'count': intervalCounter,
             'duration': timestamp - intervalTimer,  // microseconds
             'startTime': intervalTimer,

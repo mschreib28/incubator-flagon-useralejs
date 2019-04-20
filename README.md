@@ -147,7 +147,7 @@ The complete list of configurable options is:
 | data-user-from-params | Query param in the page URL to fetch userId from | null |
 | data-tool | Name of tool being logged | null |
 
-If you're interested in using our WebExtension to log user activity across all pages they visit, check out our browser specific instructions [here](https://github.com/apache/incubator-senssoft-useralejs/blob/SENSSOFT-192/src/UserALEWebExtension/README.md).
+If you're interested in using our WebExtension to log user activity across all pages they visit, check out our browser specific instructions [here](https://github.com/apache/incubator-flagon-useralejs/blob/FLAGON-336/src/UserALEWebExtension/README.md).
 
 ## Customizing your logs
 
@@ -229,7 +229,7 @@ Our top priority is to improve the testing system and to complete test coverage.
 
 ## Contributing
 
-Contributions are welcome!  Simply [submit an issue report](https://issues.apache.org/jira/browse/senssoft) for problems you encounter or a pull request for your feature or bug fix.  The core team will review it and work with you to incorporate it into UserALE.js.
+Contributions are welcome!  Simply [submit an issue report](https://issues.apache.org/jira/browse/FLAGON) for problems you encounter or a pull request for your feature or bug fix.  The core team will review it and work with you to incorporate it into UserALE.js.
 
 ## License
 

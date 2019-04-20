@@ -14,7 +14,7 @@ var prefix = 'USERALE_';
 var CONFIG_CHANGE = prefix + 'CONFIG_CHANGE';
 var ADD_LOG = prefix + 'ADD_LOG';
 
-var version$1 = "1.1.0";
+var version = "1.1.0";
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -87,11 +87,11 @@ function timeStampScale(e) {
       var navStart = performance.timing.navigationStart;
       tsScaler = function (ts) {
         return ts + navStart;
-      }
+      };
     } else {
       tsScaler = function (ts) {
         return ts;
-      }
+      };
     }
   } else {
     tsScaler = function () { return Date.now(); };
@@ -169,8 +169,8 @@ function getUserIdFromParams(param) {
  * limitations under the License.
  */
 
-var logs$1;
-var config$1;
+var logs;
+var config;
 
 // Interval Logging Globals
 var intervalID;
@@ -191,14 +191,15 @@ function setLogFilter(callback) {
   filterHandler = callback;
 }
 
+
 /**
  * Assigns the config and log container to be used by the logging functions.
  * @param  {Array} newLogs   Log container.
  * @param  {Object} newConfig Configuration to use while logging.
  */
 function initPackager(newLogs, newConfig) {
-  logs$1 = newLogs;
-  config$1 = newConfig;
+  logs = newLogs;
+  config = newConfig;
   filterHandler = null;
   mapHandler = null;
   intervalID = null;
@@ -216,7 +217,7 @@ function initPackager(newLogs, newConfig) {
  * @return {boolean}           Whether the event was logged.
  */
 function packageLog(e, detailFcn) {
-  if (!config$1.on) {
+  if (!config.on) {
     return false;
   }
 
@@ -226,12 +227,15 @@ function packageLog(e, detailFcn) {
   }
 
   var timeFields = extractTimeFields(
-    (e.timeStamp && e.timeStamp > 0) ? config$1.time(e.timeStamp) : Date.now()
+    (e.timeStamp && e.timeStamp > 0) ? config.time(e.timeStamp) : Date.now()
   );
 
   var log = {
     'target' : getSelector(e.target),
     'path' : buildPath(e),
+    'pageUrl': window.location.href,
+    'pageTitle': document.title,
+    'pageReferrer': document.referrer,
     'clientTime' : timeFields.milli,
     'microTime' : timeFields.micro,
     'location' : getLocation(e),
@@ -239,11 +243,11 @@ function packageLog(e, detailFcn) {
     'logType': 'raw',
     'userAction' : true,
     'details' : details,
-    'userId' : config$1.userId,
-    'toolVersion' : config$1.version,
-    'toolName' : config$1.toolName,
-    'useraleVersion': config$1.useraleVersion,
-    'sessionID': config$1.sessionID
+    'userId' : config.userId,
+    'toolVersion' : config.version,
+    'toolName' : config.toolName,
+    'useraleVersion': config.useraleVersion,
+    'sessionID': config.sessionID
   };
 
   if ((typeof filterHandler === 'function') && !filterHandler(log)) {
@@ -254,7 +258,7 @@ function packageLog(e, detailFcn) {
     log = mapHandler(log);
   }
 
-  logs$1.push(log);
+  logs.push(log);
 
   return true;
 }
@@ -281,7 +285,7 @@ function packageIntervalLog(e) {
     var target = getSelector(e.target);
     var path = buildPath(e);
     var type = e.type;
-    var timestamp = Math.floor((e.timeStamp && e.timeStamp > 0) ? config$1.time(e.timeStamp) : Date.now());
+    var timestamp = Math.floor((e.timeStamp && e.timeStamp > 0) ? config.time(e.timeStamp) : Date.now());
 
     // Init - this should only happen once on initialization
     if (intervalID == null) {
@@ -299,6 +303,9 @@ function packageIntervalLog(e) {
         intervalLog = {
             'target': intervalID,
             'path': intervalPath,
+            'pageUrl': window.location.href,
+            'pageTitle': document.title,
+            'pageReferrer': document.referrer,
             'count': intervalCounter,
             'duration': timestamp - intervalTimer,  // microseconds
             'startTime': intervalTimer,
@@ -308,11 +315,11 @@ function packageIntervalLog(e) {
             'targetChange': intervalID !== target,
             'typeChange': intervalType !== type,
             'userAction': false,
-            'userId': config$1.userId,
-            'toolVersion': config$1.version,
-            'toolName': config$1.toolName,
-            'useraleVersion': config$1.useraleVersion,
-            'sessionID': config$1.sessionID
+            'userId': config.userId,
+            'toolVersion': config.version,
+            'toolName': config.toolName,
+            'useraleVersion': config.useraleVersion,
+            'sessionID': config.sessionID
         };
 
         if (typeof filterHandler === 'function' && !filterHandler(intervalLog)) {
@@ -323,7 +330,7 @@ function packageIntervalLog(e) {
           intervalLog = mapHandler(intervalLog);
         }
 
-        logs$1.push(intervalLog);
+        logs.push(intervalLog);
 
         // Reset
         intervalID = target;
@@ -384,7 +391,7 @@ function buildPath(e) {
   if (e.path) {
     path = e.path;
   } else {
-    var ele = e.target
+    var ele = e.target;
     while(ele) {
       path.push(ele);
       ele = ele.parentElement;
@@ -409,6 +416,23 @@ function selectorizePath(path) {
   }
   return pathSelectors;
 }
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 var events;
 var bufferBools;
@@ -579,7 +603,7 @@ function sendOnClose(logs, config) {
       if (logs.length > 0) {
         sendLogs(logs, config.url, 1);
       }
-    })
+    });
   }
 }
 
@@ -609,18 +633,36 @@ function sendLogs(logs, url, retries) {
   req.send(data);
 }
 
-var config = {};
-var logs = [];
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+var config$1 = {};
+var logs$1 = [];
 var started = false;
+
 // Start up Userale
-config.on = false;
-config.useraleVersion = version$1;
+config$1.on = false;
+config$1.useraleVersion = version;
 
-configure(config, getInitialSettings());
-initPackager(logs, config);
+configure(config$1, getInitialSettings());
+initPackager(logs$1, config$1);
 
-if (config.autostart) {
-  setup(config);
+if (config$1.autostart) {
+  setup(config$1);
 }
 
 /**
@@ -635,7 +677,7 @@ function setup(config) {
 
       if (state === 'interactive' || state === 'complete') {
         attachHandlers(config);
-        initSender(logs, config);
+        initSender(logs$1, config);
         started = config.on = true;
       } else {
         setup(config);
@@ -644,17 +686,16 @@ function setup(config) {
   }
 }
 
-
 /**
  * Used to start the logging process if the
  * autostart configuration option is set to false.
  */
 function start() {
   if (!started) {
-    setup(config);
+    setup(config$1);
   }
 
-  config.on = true;
+  config$1.on = true;
 }
 
 /**
@@ -665,11 +706,15 @@ function start() {
  */
 function options(newConfig) {
   if (newConfig !== undefined) {
-    configure(config, newConfig);
+    configure(config$1, newConfig);
   }
 
-  return config;
+  return config$1;
 }
+
+/*
+ eslint-disable
+ */
 
 // browser is defined in firefox, but not in chrome. In chrome, they use
 // the 'chrome' global instead. Let's map it to browser so we don't have

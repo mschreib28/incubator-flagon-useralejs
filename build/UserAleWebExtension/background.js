@@ -14,6 +14,23 @@ var prefix = 'USERALE_';
 var CONFIG_CHANGE = prefix + 'CONFIG_CHANGE';
 var ADD_LOG = prefix + 'ADD_LOG';
 
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 /**
  * Creates a function to normalize the timestamp of the provided event.
  * @param  {Object} e An event containing a timeStamp property.
@@ -37,11 +54,11 @@ function timeStampScale(e) {
       var navStart = performance.timing.navigationStart;
       tsScaler = function (ts) {
         return ts + navStart;
-      }
+      };
     } else {
       tsScaler = function (ts) {
         return ts;
-      }
+      };
     }
   } else {
     tsScaler = function () { return Date.now(); };
@@ -66,38 +83,6 @@ function timeStampScale(e) {
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-var logs$1;
-var config$1;
-
-// Interval Logging Globals
-var intervalID;
-var intervalType;
-var intervalPath;
-var intervalTimer;
-var intervalCounter;
-var intervalLog;
-
-var filterHandler = null;
-var mapHandler = null;
-
-/**
- * Assigns the config and log container to be used by the logging functions.
- * @param  {Array} newLogs   Log container.
- * @param  {Object} newConfig Configuration to use while logging.
- */
-function initPackager(newLogs, newConfig) {
-  logs$1 = newLogs;
-  config$1 = newConfig;
-  filterHandler = null;
-  mapHandler = null;
-  intervalID = null;
-  intervalType = null;
-  intervalPath = null;
-  intervalTimer = null;
-  intervalCounter = 0;
-  intervalLog = null;
-}
 
 /**
  * Extract the millisecond and microsecond portions of a timestamp.
@@ -184,7 +169,7 @@ function sendOnClose(logs, config) {
       if (logs.length > 0) {
         sendLogs(logs, config.url, 1);
       }
-    })
+    });
   }
 }
 
@@ -213,6 +198,10 @@ function sendLogs(logs, url, retries) {
 
   req.send(data);
 }
+
+/*
+ eslint-disable
+ */
 
 // inherent dependency on globals.js, loaded by the webext
 
@@ -257,8 +246,6 @@ function storeCallback(item) {
     toolName: item.toolName,
     toolVersion: item.toolVersion
   });
-
-  initPackager(logs, config);
   initSender(logs, config);
 }
 
@@ -301,7 +288,6 @@ browser.runtime.onMessage.addListener(function (message) {
           toolName: message.payload.toolName,
           toolVersion: message.payload.toolVersion
         });
-        initPackager(logs, updatedConfig);
         initSender(logs, updatedConfig);
         dispatchTabMessage(message);
       })();

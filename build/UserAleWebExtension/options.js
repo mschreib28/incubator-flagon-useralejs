@@ -13,6 +13,8 @@ var prefix = 'USERALE_';
 
 var CONFIG_CHANGE = prefix + 'CONFIG_CHANGE';
 
+/* eslint-disable */
+
 if (chrome) {
   browser = chrome;
 }

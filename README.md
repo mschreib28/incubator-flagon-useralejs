@@ -1,13 +1,13 @@
-# Apache SensSoft UserALE.js (Incubating)
+# Apache Flagon UserALE.js (Incubating)
 
 [![Build Status](https://builds.apache.org/job/useralejs-ci/badge/icon?style=plastic)](https://builds.apache.org/job/useralejs-ci?)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
-The official JavaScript client for [Apache SensSoft UserALE](https://github.com/apache/incubator-senssoft-userale).  
+The official JavaScript client for [Apache Flagon UserALE](https://github.com/apache/incubator-flagon-userale).  
 
 UserALE.js is a client side instrumentation library written in JavaScript. It is designed to be an easy-to-use, lightweight, and dependency-free way to quickly gather logs from your web applications.
 
-Additional documentation can be found at our [project website](http://senssoft.incubator.apache.org/userale/).
+Additional documentation can be found at our [project website](http://flagon.incubator.apache.org/userale/).
 
 ## Prerequsites
 
@@ -115,7 +115,7 @@ npm run test
   45 passing (954ms)
   1 pending
 ```
-Any failing tests will also be logged in the terminal. If there are failing tests, please consider [logging an issue in JIRA](https://issues.apache.org/jira/projects/SENSSOFT).
+Any failing tests will also be logged in the terminal. If there are failing tests, please consider [logging an issue in JIRA](https://issues.apache.org/jira/projects/FLAGON).
 
 ## Use and Configure
 
@@ -233,4 +233,4 @@ Contributions are welcome!  Simply [submit an issue report](https://issues.apach
 
 ## License
 
-Apache SensSoft UserALE.js is provided under Apache License version 2.0. See LICENSE file for more details. Software as a Sensor is a trademark of the Charles Stark Draper Laboratory, Inc.
+Apache Flagon UserALE.js is provided under Apache License version 2.0. See LICENSE and NOTICE files at MASTER for more details.

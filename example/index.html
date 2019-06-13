@@ -29,5 +29,18 @@ limitations under the License.
   <div class="container">
     <button id="test_button">Click me!</button>
   </div>
+  Messages:
+  <ul id="messages"></ul>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.1/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+  <script>
+    $(function () {
+      const socket = io();
+      socket.on('logging', function(msg){
+        console.log('msg: ', msg);
+        $('#messages').append($('<li>').text(msg));
+      });
+    });
+  </script>
 </body>
 </html>
